@@ -182,7 +182,8 @@ async def process_service_callback(call: CallbackQuery, state: FSMContext):
     
     def save_to_sheets():
         spreadsheet_name = os.getenv("SPREADSHEET_NAME", "Записи з Telegram-бота")
-        gc = gspread.service_account(filename="credentials.json")
+        creds_path = "/etc/secrets/credentials.json" if os.path.exists("/etc/secrets/credentials.json") else "credentials.json"
+        gc = gspread.service_account(filename=creds_path)
         sh = gc.open(spreadsheet_name)
         worksheet = sh.sheet1
         worksheet.append_row(row_to_add)
